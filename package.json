@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "transpile": "./node_modules/.bin/babel  ./src --experimental --source-maps-inline -d ./dist && node dist/index.js"
+    "transpile": "./node_modules/.bin/babel  ./src --experimental --source-maps-inline -d ./dist",
+    "run-app": "yarn transpile && ./dist/index.js",
+    "test": "yarn transpile && ./node_modules/jasmine/bin/jasmine.js"
   },
   "repository": {
     "type": "git",
@@ -18,6 +19,7 @@
   },
   "homepage": "https://github.com/asarenski/fifo-crypto-tax-js#readme",
   "dependencies": {
+    "jasmine": "^3.0.0",
     "lodash": "^4.17.5"
   },
   "devDependencies": {
