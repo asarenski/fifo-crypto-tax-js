@@ -1,0 +1,22 @@
+{
+  "name": "fifo-crypto-tax",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/asarenski/fifo-crypto-tax-js.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/asarenski/fifo-crypto-tax-js/issues"
+  },
+  "homepage": "https://github.com/asarenski/fifo-crypto-tax-js#readme",
+  "dependencies": {
+    "lodash": "^4.17.5"
+  }
+}
