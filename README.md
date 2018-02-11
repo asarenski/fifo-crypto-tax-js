@@ -11,3 +11,12 @@
   'order id': '9e780179-f65d-474a-96ff-e2dd5be5e7ba'
 }
 ```
+
+## parseHistoryJsonTypes will parse the inital types to:
+```js
+{
+  type: string,
+  time: moment,
+  amount: float,
+}
+```
