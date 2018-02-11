@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "transpile": "./node_modules/.bin/babel  ./src --experimental --source-maps-inline -d ./dist",
-    "run-app": "yarn transpile && ./dist/index.js",
+    "transpile": "babel ./src -d ./dist",
+    "run-app": "yarn transpile && node dist/index.js",
     "test": "yarn transpile && ./node_modules/jasmine/bin/jasmine.js"
   },
   "repository": {
@@ -19,12 +19,15 @@
   },
   "homepage": "https://github.com/asarenski/fifo-crypto-tax-js#readme",
   "dependencies": {
+    "csvtojson": "^1.1.9",
     "jasmine": "^3.0.0",
     "lodash": "^4.17.5"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
-    "babel-preset-env": "^1.6.1"
+    "babel-preset-env": "^1.6.1",
+    "babel-plugin-syntax-async-functions": "^6.13.0",
+    "babel-preset-stage-0": "^6.24.1"
   }
 }

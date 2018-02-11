@@ -14,6 +14,10 @@ class Queue {
     restack(item) {
         return this.array.push(item);
     }
+
+    getLength() {
+        return this.array.length;
+    }
 }
 
 export default Queue;
