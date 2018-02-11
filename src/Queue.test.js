@@ -1,11 +1,11 @@
 import Queue from './Queue';
 
 describe('Queue', () => {
-    describe('add', () => {
+    describe('enqueue', () => {
         it('should continually add items to the beginning of the Queue', () => {
             const q = new Queue();
-            q.add(1);
-            q.add(2);
+            q.enqueue(1);
+            q.enqueue(2);
             expect(q.array).toEqual([2, 1])
         });
     });
@@ -13,13 +13,13 @@ describe('Queue', () => {
     describe('remove', () => {
         it('if empty returns undefined', () => {
             const q = new Queue();
-            expect(q.remove()).toBeUndefined();
+            expect(q.dequeue()).toBeUndefined();
         });
 
         it('should remove the object at the end of the Queue and return it', () => {
             const q = new Queue([1, 3, 5, 7]);
-            expect(q.remove()).toBe(7);
-            expect(q.remove()).toBe(5);
+            expect(q.dequeue()).toBe(7);
+            expect(q.dequeue()).toBe(5);
         });
     });
 

@@ -3,11 +3,11 @@ class Queue {
         this.array = Array.isArray(array) ? array : [];
     }
 
-    add(item) {
+    enqueue(item) {
         this.array.unshift(item);
     }
 
-    remove() {
+    dequeue() {
         return this.array.pop();
     }
 
