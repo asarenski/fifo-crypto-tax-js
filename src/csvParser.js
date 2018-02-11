@@ -1,6 +1,6 @@
 import csv from 'csvtojson';
 
-const  parseAsync = (filePath) => {
+const parseAsync = (filePath) => {
     return new Promise((resolve, reject) => {
         csv()
         .fromFile(filePath)

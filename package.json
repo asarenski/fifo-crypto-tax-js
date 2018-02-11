@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "transpile": "babel ./src -d ./dist",
+    "transpile": "babel src -d dist",
     "run-app": "yarn transpile && node dist/index.js",
     "test": "yarn transpile && ./node_modules/jasmine/bin/jasmine.js"
   },
@@ -24,10 +24,10 @@
     "lodash": "^4.17.5"
   },
   "devDependencies": {
+    "babel": "^6.23.0",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "babel-plugin-syntax-async-functions": "^6.13.0",
-    "babel-preset-stage-0": "^6.24.1"
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.6.1"
   }
 }
