@@ -1,7 +1,7 @@
 require('babel-polyfill');
-import { parseAsync } from './csvParser';
 import _ from 'lodash';
-import validateCsvOutput from './validateCsvOutput';
+import { parseAsync } from './csvParser';
+import validate from './validateCsvOutput';
 import convertHistoryTypes from './convertHistoryTypes';
 
 _.mixin({

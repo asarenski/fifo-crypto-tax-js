@@ -1,4 +1,6 @@
-const validateCsvOutput = (obj, requiredKeys) => {
+import { requiredCsvOutputKeys } from './constants';
+
+const validate = (obj, requiredKeys) => {
   requiredKeys.forEach((key) => {
       const value = obj[key];
       if (_.isNil(value)) {
@@ -18,4 +20,8 @@ const validateCsvOutput = (obj, requiredKeys) => {
   };
 }
 
-export default validateCsvOutput;
+const validateOutputJson= (objects) => {
+    objects.forEach(object => validate(object, requiredCsvOutputKeys));
+};
+
+export default validateOutputJson;
