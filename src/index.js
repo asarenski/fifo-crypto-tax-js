@@ -1,9 +1,26 @@
 require('babel-polyfill');
 import { parseAsync } from './csvParser';
 import _ from 'lodash';
+import validateCsvOutput from './validateCsvOutput'; 
 
 // Note: only use the history from GDAX. The buys and sells throw things off as that misses certain 'match' entries.
 // still need to figure out what those match entries are representing.
+
+const historyTypes = {
+    MATCH: 'match',
+    WITHDRAWAL: 'withdrawal',
+    DEPOSIT: 'deposit',
+};
+
+const requiredCsvOutputKeys = [
+    'amount',
+    'buyDate',
+    'buyPrice',
+    'buyTotal',
+    'saleDate',
+    'salePrice',
+    'totalSale',
+];
 
 const historyFilePath = '/home/asarenski/Downloads/history.csv';
 (async function() {
