@@ -3,15 +3,15 @@ import { historyTypes, convertedHistoryTypes } from './constants';
 const convertType = (type, amount) => {
   switch (type) {
     case historyTypes.MATCH:
-      return parseFloat(amount) > 0 ? convertHistoryTypes.BUY : convertedHistoryTypes.SELL;
+      return parseFloat(amount) > 0 ? convertedHistoryTypes.BUY : convertedHistoryTypes.SELL;
     case historyTypes.WITHDRAWAL:
-      return convertHistoryTypes.SELL
+      return convertedHistoryTypes.SELL
     case historyTypes.DEPOSIT:
       return convertedHistoryTypes.BUY
   }
 };
 
-const convertHistoryTypes = (historyObjects) => {
+const convertTypeToBuyOrSell = (historyObjects) => {
   return historyObjects.map((historyObject) => {
     return {
       convertedType: convertType(historyObject.type, historyObject.amount),
@@ -20,4 +20,4 @@ const convertHistoryTypes = (historyObjects) => {
   });
 };
 
-export default convertHistoryTypes;
+export default convertTypeToBuyOrSell;

@@ -3,13 +3,13 @@ import _ from 'lodash';
 import { parseAsync } from './csvParser';
 import validate from './validateCsvOutput';
 import parseHistoryJsonTypes from './parseHistoryJsonTypes';
-import convertHistoryTypes from './convertHistoryTypes';
+import convertTypeToBuyOrSell from './convertTypeToBuyOrSell';
 import { convertedHistoryTypes } from './constants';
 import Queue from './Queue';
 
 _.mixin({
     parseHistoryJsonTypes,
-    convertHistoryTypes,
+    convertTypeToBuyOrSell,
 });
 
 // Note: only use the history from GDAX. The buys and sells throw things off as that misses certain 'match' entries.
@@ -18,21 +18,28 @@ _.mixin({
 const historyFilePath = '/home/asarenski/Downloads/history.csv';
 (async function() {
     const historyJson = await parseAsync(historyFilePath);
-    const result = _.chain(historyJson)
+    const organizedTransactions = _.chain(historyJson)
         .parseHistoryJsonTypes()
-        .convertHistoryTypes()
+        .convertTypeToBuyOrSell()
         .reduce((acc, curr) => {
-            switch (curr.type) {
+            const { buys, sells } = acc;
+            switch (curr.convertedType) {
                 case convertedHistoryTypes.BUY:
-                  buys.enqueue(curr);
+                    const q = new Queue(buys.array);
+                    q.enqueue(curr);
+                    return {
+                        buys: q,
+                        sells,
+                    };
                 case convertedHistoryTypes.SELL:
-                  sells.push(curr);
+                    return {
+                        buys: new Queue(buys.array),
+                        sells: [...sells, curr],
+                    };
             }
         }, {
             buys: new Queue(),
             sells: [],
         })
         .value();
-
-    console.log('result: ', result);
 })();
