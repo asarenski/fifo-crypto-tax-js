@@ -1,13 +1,4 @@
-import Queue from "./Queue";
-
-const createEntry = (buy, sell) => {
-  const amount = buy.amount - sell.amount >= 0 ? sell.amount : buy.amount; 
-  return {
-    amount,
-    buyDate: buy.time,
-    saleDate: sell.time,
-  };
-};
+import Queue from "../Queue";
 
 const fifoRecursive = (q, sell, collected) => {
   const buy = q.dequeue();
@@ -15,7 +6,7 @@ const fifoRecursive = (q, sell, collected) => {
       throw new Error(`value was undefined ${buy}, fix map of sale transactions!`);
   }
   if (buy.amount - sell.amount >= 0) {
-      const entry = createEntry(buy, sell);
+      const entry = createFifoEntry(buy, sell);
       const subtractedBuy = {
         ...buy,
         amount: buy.amount - sell.amount
@@ -32,9 +23,8 @@ const fifoRecursive = (q, sell, collected) => {
       };
   }
   
-  const entry = createEntry(buy, sell);
+  const entry = createFifoEntry(buy, sell);
   return fifoRecursive(q, sell, [...collected, entry]);
 };
 
-export { createEntry };
 export default fifoRecursive;
