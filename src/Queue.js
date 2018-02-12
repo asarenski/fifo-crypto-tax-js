@@ -1,6 +1,6 @@
 class Queue {
     constructor(array) {
-        this.array = Array.isArray(array) ? array : [];
+        this.array = Array.isArray(array) ? [...array] : [];
     }
 
     enqueue(item) {
