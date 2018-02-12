@@ -30,3 +30,16 @@
   amount: float,
 }
 ```
+
+## desired output schema
+```js
+{
+  amount,
+  buyDate,
+  buyPrice,
+  buyTotal,
+  saleDate,
+  salePrice,
+  totalSale,
+}
+```

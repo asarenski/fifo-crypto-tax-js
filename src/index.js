@@ -43,14 +43,18 @@ const historyFilePath = '/home/asarenski/Downloads/history.csv';
         })
         .value();
 
-    const q = new Queue(organizedTransactions.buys.array);
     const result = _.chain(organizedTransactions.sells)
         .map(({ ...props, amount }) => ({ ...props, amount: Math.abs(amount) }))
-        .map((sell) => {
-            const fifoBuy = q.dequeue();
-            if (!fifoBuy) {
-                throw new Error(`fifoBuy was undefined ${fifoBuy}, fix map of sale transactions!`);
-            }
+        .reduce(({ buys, sellsWithCosts }, sell) => {
+            // TODO call fifoRecursive for sell
+            // TODO const { recursedBuys, collectedSells } = fifoRecurs;
+            // return {
+            //     buys: recursedbuys,
+            //     sellsWithCosts: [...sellsWithCosts, ...collectedSells],
+            // };
+        }, {
+            buys: new Queue(organizedTransactions.buys.array),
+            sellsWithCosts: []
         })
         .value();
 
