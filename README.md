@@ -20,3 +20,13 @@
   amount: float,
 }
 ```
+
+## convertTypeToBuyOrSell
+```js
+{
+  convertedType: BUY | SELL
+  type: string,
+  time: moment,
+  amount: float,
+}
+```

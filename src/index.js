@@ -42,4 +42,17 @@ const historyFilePath = '/home/asarenski/Downloads/history.csv';
             sells: [],
         })
         .value();
+
+    const q = new Queue(organizedTransactions.buys.array);
+    const result = _.chain(organizedTransactions.sells)
+        .map(({ ...props, amount }) => ({ ...props, amount: Math.abs(amount) }))
+        .map((sell) => {
+            const fifoBuy = q.dequeue();
+            if (!fifoBuy) {
+                throw new Error(`fifoBuy was undefined ${fifoBuy}, fix map of sale transactions!`);
+            }
+        })
+        .value();
+
+    console.log('result: ', result);
 })();
