@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/asarenski/fifo-crypto-tax-js#readme",
   "dependencies": {
+    "axios": "^0.17.1",
     "csvtojson": "^1.1.9",
     "jasmine": "^3.0.0",
     "lodash": "^4.17.5",

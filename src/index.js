@@ -1,5 +1,6 @@
 require('babel-polyfill');
 import _ from 'lodash';
+import axios from 'axios';
 import { parseAsync } from './csvParser';
 import validateOutputJson from './validateOutputJson';
 import parseHistoryJsonTypes from './parseHistoryJsonTypes';
@@ -63,5 +64,14 @@ const historyFilePath = '/home/asarenski/Downloads/history.csv';
         throw new Error('Leftover buys after calculating fifo. This means history.csv does not have a sum of zero. Please re-check history.csv and fix any mistakes.');
     }
 
-    console.log('sellEntries: ', sellEntries);
+    // gdax api
+    // https://docs.gdax.com/#api
+    // https://api.gdax.com/products/btc-usd/candles?start=2018-02-10T01:00:00&end=2018-02-10T01:30:00&granularity=300
+    // const FIVE_MINUTE_GRANULAR = 300;
+    // const [ gdaxTime, gdaxLow, gdaxHigh ] = gdaxResponse;
+
+    const url = 'https://api.gdax.com/products/btc-usd/candles?start=2018-02-10T01:00:00&end=2018-02-10T01:30:00&granularity=300';
+    const res = await axios.get(url);
+    const [ gdaxTime, gdaxLow, gdaxHigh ] = res.data[0];
+
 })();
