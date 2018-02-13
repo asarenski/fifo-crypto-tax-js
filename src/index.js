@@ -1,11 +1,12 @@
 require('babel-polyfill');
 import _ from 'lodash';
 import { parseAsync } from './csvParser';
-import validate from './validateCsvOutput';
+import validateOutputJson from './validateOutputJson';
 import parseHistoryJsonTypes from './parseHistoryJsonTypes';
 import convertTypeToBuyOrSell from './convertTypeToBuyOrSell';
 import { convertedHistoryTypes } from './constants';
 import Queue from './Queue';
+import fifoRecursive from './fifoRecursive/fifoRecursive';
 
 _.mixin({
     parseHistoryJsonTypes,
@@ -45,16 +46,15 @@ const historyFilePath = '/home/asarenski/Downloads/history.csv';
 
     const result = _.chain(organizedTransactions.sells)
         .map(({ ...props, amount }) => ({ ...props, amount: Math.abs(amount) }))
-        .reduce(({ buys, sellsWithCosts }, sell) => {
-            // TODO call fifoRecursive for sell
-            // TODO const { recursedBuys, collectedSells } = fifoRecurs;
-            // return {
-            //     buys: recursedbuys,
-            //     sellsWithCosts: [...sellsWithCosts, ...collectedSells],
-            // };
+        .reduce(({ buys, sellEntries }, sell) => {
+            const { buyQueue, sellEntries: newEntries } = fifoRecursive(buys, sell);
+            return {
+                buys: new Queue(buyQueue.array),
+                sellEntries: [...sellEntries, ...newEntries]
+            };
         }, {
             buys: new Queue(organizedTransactions.buys.array),
-            sellsWithCosts: []
+            sellEntries: []
         })
         .value();
 
