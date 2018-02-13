@@ -1,8 +1,8 @@
-import createFifoEntry from './createFifoEntry';
+import createSellEntry from './createSellEntry';
 
 const mockTransaction = (time, amount) => ({time, amount});
 
-describe('createFifoEntry', () => {
+describe('createSellEntry', () => {
   it('should return the entry with the buy and sell times', () => {
     const expectedBuyTime = 'foooo1234'
     const mockBuy = mockTransaction(expectedBuyTime, 0.321);
@@ -10,7 +10,7 @@ describe('createFifoEntry', () => {
     const expecteSellTime = '4444444442eyyy';
     const mockSell = mockTransaction(expecteSellTime, 0.4444);
 
-    const { buyDate, saleDate } = createFifoEntry(mockBuy, mockSell);
+    const { buyDate, saleDate } = createSellEntry(mockBuy, mockSell);
     expect(buyDate).toEqual(expectedBuyTime);
     expect(saleDate).toEqual(expecteSellTime);
   });
@@ -20,7 +20,7 @@ describe('createFifoEntry', () => {
     const mockBuy = mockTransaction('foo', expectedAmount);
     const mockSell = mockTransaction('bar', expectedAmount + 0.5);
 
-    const { amount } = createFifoEntry(mockBuy, mockSell);
+    const { amount } = createSellEntry(mockBuy, mockSell);
     expect(amount).toEqual(expectedAmount);
   });
 
@@ -28,13 +28,13 @@ describe('createFifoEntry', () => {
     const mockBuy = mockTransaction('foo', 0.4444);
     const mockSell = mockTransaction('bar', mockBuy.amount - 0.2);
 
-    const { amount } = createFifoEntry(mockBuy, mockSell);
+    const { amount } = createSellEntry(mockBuy, mockSell);
     expect(amount).toEqual(mockSell.amount);
   });
 
   it('should still work if the buy and sell amounts are the same', () => {
     const mockBoth = mockTransaction('jflksjdf', 0.44);
-    const entry = createFifoEntry(mockBoth, mockBoth);
+    const entry = createSellEntry(mockBoth, mockBoth);
     expect(entry).toEqual({
       amount: mockBoth.amount,
       buyDate: mockBoth.time,

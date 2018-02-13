@@ -1,5 +1,5 @@
 import Queue from '../Queue';
-import createFifoEntry from './createFifoEntry';
+import createSellEntry from './createSellEntry';
 import { fixFloat } from '../mathUtil';
 
 const fifoRecursive = (q, sell, collected = []) => {
@@ -14,7 +14,7 @@ const fifoRecursive = (q, sell, collected = []) => {
   // console.log('buy - sell >= 0: ', fixFloat(buy.amount - sell.amount) === 0);
 
   if (fixFloat(buy.amount - sell.amount) >= 0) {
-      const entry = createFifoEntry(buy, sell);
+      const entry = createSellEntry(buy, sell);
       const remainingBuy = {
         ...buy,
         amount: fixFloat(buy.amount - sell.amount)
@@ -36,7 +36,7 @@ const fifoRecursive = (q, sell, collected = []) => {
     ...sell,
     amount: buy.amount
   };
-  const entry = createFifoEntry(buy, sellEntry);
+  const entry = createSellEntry(buy, sellEntry);
 
   const remainingSell = {
     ...sell,
