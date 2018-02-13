@@ -1,4 +1,9 @@
-## Example history object
+## Description
+This script uses a GDAX history CSV and outputs all sells calculated using FIFO.
+These sells can then be directly entered on a Schedule D.
+
+## Data Types
+### example GDAX history object
 ```js
 {
   type: 'match',
@@ -12,7 +17,7 @@
 }
 ```
 
-## parseHistoryJsonTypes will parse the inital types to:
+### parseHistoryJsonTypes will parse the inital types to:
 ```js
 {
   type: string,
@@ -21,7 +26,7 @@
 }
 ```
 
-## convertTypeToBuyOrSell
+### convertTypeToBuyOrSell will parse BUY or SELL
 ```js
 {
   convertedType: BUY | SELL
@@ -31,7 +36,7 @@
 }
 ```
 
-## desired output schema
+### output schema
 ```js
 {
   amount,
