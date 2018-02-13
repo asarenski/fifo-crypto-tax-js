@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "clean": "rm -rf dist",
-    "transpile": "yarn clean && babel src -d dist",
-    "run-app": "yarn transpile && node dist/index.js",
-    "test": "yarn transpile && ./node_modules/jasmine/bin/jasmine.js"
+    "babel": "yarn clean && babel src -d dist",
+    "app": "yarn babel && node dist/index.js",
+    "test": "yarn babel && ./node_modules/jasmine/bin/jasmine.js"
   },
   "repository": {
     "type": "git",
@@ -29,8 +29,8 @@
     "babel": "^6.23.0",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-polyfill": "^6.26.0",
-    "babel-preset-env": "^1.6.1"
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-stage-3": "^6.24.1"
   }
 }
