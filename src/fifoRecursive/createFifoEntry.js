@@ -1,5 +1,7 @@
+import { fixFloat } from '../mathUtil';
+
 const createFifoEntry = (buy, sell) => {
-  const amount = buy.amount - sell.amount >= 0 ? sell.amount : buy.amount;
+  const amount = fixFloat(buy.amount - sell.amount) >= 0 ? fixFloat(sell.amount) : fixFloat(buy.amount);
   return {
     amount,
     buyDate: buy.time,

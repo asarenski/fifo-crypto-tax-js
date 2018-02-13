@@ -1,30 +1,48 @@
-import Queue from "../Queue";
+import Queue from '../Queue';
+import createFifoEntry from './createFifoEntry';
+import { fixFloat } from '../mathUtil';
 
-const fifoRecursive = (q, sell, collected) => {
+const fifoRecursive = (q, sell, collected = []) => {
+  // console.log('')
   const buy = q.dequeue();
   if (!buy) {
       throw new Error(`value was undefined ${buy}, fix map of sale transactions!`);
   }
-  if (buy.amount - sell.amount >= 0) {
+
+  // console.log('buy amount', buy.amount);
+  // console.log('sell amount', sell.amount);
+  // console.log('buy - sell >= 0: ', fixFloat(buy.amount - sell.amount) === 0);
+
+  if (fixFloat(buy.amount - sell.amount) >= 0) {
       const entry = createFifoEntry(buy, sell);
-      const subtractedBuy = {
+      const remainingBuy = {
         ...buy,
-        amount: buy.amount - sell.amount
+        amount: fixFloat(buy.amount - sell.amount)
       };
 
-      const recursedQ = new Queue(q.array);
-      if (subtractedBuy.amount > 0) {
-        recursedQ.restack(subtractedBuy);
+      const buyQueue = new Queue(q.array);
+      if (remainingBuy.amount > 0) {
+        buyQueue.restack(remainingBuy);
       }
 
       return {
-        recursedQ,
-        recursedSells: [...collected, entry],
+        buyQueue,
+        sellEntries: [...collected, entry],
       };
   }
   
-  const entry = createFifoEntry(buy, sell);
-  return fifoRecursive(q, sell, [...collected, entry]);
+  // console.log('q is: ', q)
+  const sellEntry = {
+    ...sell,
+    amount: buy.amount
+  };
+  const entry = createFifoEntry(buy, sellEntry);
+
+  const remainingSell = {
+    ...sell,
+    amount: fixFloat(sell.amount - buy.amount)
+  };
+  return fifoRecursive(q, remainingSell, [...collected, entry]);
 };
 
 export default fifoRecursive;
