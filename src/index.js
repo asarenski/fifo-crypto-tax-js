@@ -44,7 +44,7 @@ const historyFilePath = '/home/asarenski/Downloads/history.csv';
         })
         .value();
 
-    const result = _.chain(organizedTransactions.sells)
+    const { buys: leftoverBuys, sellEntries } = _.chain(organizedTransactions.sells)
         .map(({ ...props, amount }) => ({ ...props, amount: Math.abs(amount) }))
         .reduce(({ buys, sellEntries }, sell) => {
             const { buyQueue, sellEntries: newEntries } = fifoRecursive(buys, sell);
@@ -58,5 +58,10 @@ const historyFilePath = '/home/asarenski/Downloads/history.csv';
         })
         .value();
 
-    console.log('result: ', result);
+    if (!_.isEmpty(leftoverBuys.array)) {
+        console.log("leftover buys: \n", leftoverBuys.array);
+        throw new Error('Leftover buys after calculating fifo. This means history.csv does not have a sum of zero. Please re-check history.csv and fix any mistakes.');
+    }
+
+    console.log('sellEntries: ', sellEntries);
 })();
