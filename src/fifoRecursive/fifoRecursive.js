@@ -3,15 +3,10 @@ import createSellEntry from './createSellEntry';
 import { fixFloat } from '../mathUtil';
 
 const fifoRecursive = (q, sell, collected = []) => {
-  // console.log('')
   const buy = q.dequeue();
   if (!buy) {
-      throw new Error(`value was undefined ${buy}, fix map of sale transactions!`);
+      throw new Error(`Value was ${buy}. This means the amount sum is not zero. Something is wrong with the csv.`);
   }
-
-  // console.log('buy amount', buy.amount);
-  // console.log('sell amount', sell.amount);
-  // console.log('buy - sell >= 0: ', fixFloat(buy.amount - sell.amount) === 0);
 
   if (fixFloat(buy.amount - sell.amount) >= 0) {
       const entry = createSellEntry(buy, sell);
@@ -30,8 +25,7 @@ const fifoRecursive = (q, sell, collected = []) => {
         sellEntries: [...collected, entry],
       };
   }
-  
-  // console.log('q is: ', q)
+
   const sellEntry = {
     ...sell,
     amount: buy.amount
