@@ -1,8 +1,6 @@
 require('babel-polyfill');
 import _ from 'lodash';
-import axios from 'axios';
 import moment from 'moment';
-import async from 'async';
 import { parseAsync } from './csvParser';
 import validateOutputJson from './validateOutputJson';
 import parseHistoryJsonTypes from './parseHistoryJsonTypes';
@@ -10,7 +8,7 @@ import convertTypeToBuyOrSell from './convertTypeToBuyOrSell';
 import { convertedHistoryTypes } from './constants';
 import Queue from './Queue';
 import fifoRecursive from './fifoRecursive/fifoRecursive';
-
+import asyncGet from './asyncGet';
 
 _.mixin({
     parseHistoryJsonTypes,
@@ -94,19 +92,10 @@ const historyFilePath = '/home/asarenski/Downloads/history.csv';
         .keys()
         .map(date => moment(date))
         .map(currentMoment => buildUrl(currentMoment.format(), currentMoment.add(5, 'minutes').format()))
-        .take(3) // REMOVE
+        // .take(3) // REMOVE
         .value();
 
-    async.mapLimit(urls, 1, (url, callback) => {
-        return axios.get(url)
-        .then(res => {
-            console.log('retrieving data...')
-            setTimeout(() => (callback(null, res.data)), 700);
-        })
-        .catch(e => { throw e });
-    }, (err, results) => {
-        if (err) throw err;
-        console.log(results);
-    });
-
+    const GDAX_RATE_LIMIT_IN_MILLIS = 700;
+    const data = await asyncGet(urls, GDAX_RATE_LIMIT_IN_MILLIS);
+    console.log(data);
 })();
