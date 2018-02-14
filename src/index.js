@@ -99,6 +99,11 @@ const historyFilePath = '/home/asarenski/Downloads/history.csv';
         .value();
 
     const GDAX_RATE_LIMIT_IN_MILLIS = 700;
-    const data = await asyncGet(urls, GDAX_RATE_LIMIT_IN_MILLIS);
+    const rawPricingData = await asyncGet(urls, GDAX_RATE_LIMIT_IN_MILLIS);
+    const processedPricingData = rawPricingData.map(({ key, data }) => {
+        const [[,,, gdaxOpen ]] = data;
+        return { key, price: gdaxOpen };
+    });
 
+    console.log(processedPricingData);
 })();
