@@ -67,9 +67,9 @@ const historyFilePath = '/home/asarenski/Downloads/history.csv';
 
     // gdax api
     // https://docs.gdax.com/#api
-    // https://api.gdax.com/products/btc-usd/candles?start=2018-02-10T01:00:00&end=2018-02-10T01:30:00&granularity=300
-    // const FIVE_MINUTE_GRANULAR = 300;
+    // https://api.gdax.com/products/btc-usd/candles?start=2018-02-10T01:00:00&end=2018-02-10T01:00:05&granularity=300
     // const [ gdaxTime, gdaxLow, gdaxHigh, gdaxOpen, gdaxClose, gdaxVolume ] = gdaxResponse;
+    // Notes: Setting a 1 minute difference between start and end time gives 1 result with a 5 min granularity
 
     const buildUrl = (start, end) => {
         const FIVE_MINUTE_GRANULAR = 300;
@@ -90,12 +90,15 @@ const historyFilePath = '/home/asarenski/Downloads/history.csv';
             return acc;
         }, {})
         .keys()
-        .map(date => moment(date))
-        .map(currentMoment => buildUrl(currentMoment.format(), currentMoment.add(5, 'minutes').format()))
+        .map(date => ({ key: date, momentObj: moment(date) }))
+        .map(({ key, momentObj }) => ({
+            key,
+            url: buildUrl(momentObj.format(), momentObj.add(1, 'minutes').format())
+        }))
         // .take(3) // REMOVE
         .value();
 
     const GDAX_RATE_LIMIT_IN_MILLIS = 700;
     const data = await asyncGet(urls, GDAX_RATE_LIMIT_IN_MILLIS);
-    console.log(data);
+
 })();
