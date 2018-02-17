@@ -9,7 +9,7 @@ import { convertedHistoryTypes } from './constants';
 import Queue from './Queue';
 import fifoRecursive from './fifoRecursive/fifoRecursive';
 import asyncGet from './util/asyncGet';
-import { createUrlsFromSellEntries } from './gdaxPricing';
+import { createUrlsFromSellEntries, processPricingData, getPricingData } from './gdaxPricing';
 
 _.mixin({
     parseHistoryJsonTypes,
@@ -66,19 +66,9 @@ const historyFilePath = '/home/asarenski/Downloads/history.csv';
         throw new Error('Leftover buys after calculating fifo. This means history.csv does not have a sum of zero. Please re-check history.csv and fix any mistakes.');
     }
 
-    // gdax api
-    // https://docs.gdax.com/#api
-    // https://api.gdax.com/products/btc-usd/candles?start=2018-02-10T01:00:00&end=2018-02-10T01:00:05&granularity=300
-    // const [ gdaxTime, gdaxLow, gdaxHigh, gdaxOpen, gdaxClose, gdaxVolume ] = gdaxResponse;
-    // Notes: Setting a 1 minute difference between start and end time gives 1 result with a 5 min granularity
     const urls = createUrlsFromSellEntries(sellEntries);
-
-    const GDAX_RATE_LIMIT_IN_MILLIS = 700;
-    const rawPricingData = await asyncGet(urls, GDAX_RATE_LIMIT_IN_MILLIS);
-    const processedPricingData = rawPricingData.map(({ key, data }) => {
-        const [[,,, gdaxOpen ]] = data;
-        return { key, price: gdaxOpen };
-    });
+    const rawPricingData = await getPricingData(urls);
+    const processedPricingData = processPricingData(rawPricingData)
 
     console.log(processedPricingData);
 })();
