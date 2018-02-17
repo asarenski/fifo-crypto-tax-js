@@ -1,6 +1,6 @@
 import Queue from '../Queue';
 import createSellEntry from './createSellEntry';
-import { fixFloat } from '../mathUtil';
+import { fixFloat } from '../util/mathUtil';
 
 const fifoRecursive = (q, sell, collected = []) => {
   const buy = q.dequeue();

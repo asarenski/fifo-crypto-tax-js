@@ -1,14 +1,14 @@
 require('babel-polyfill');
 import _ from 'lodash';
 import moment from 'moment';
-import { parseAsync } from './csvParser';
+import { parseAsync } from './util/csvParser';
 import validateOutputJson from './validateOutputJson';
 import parseHistoryJsonTypes from './parseHistoryJsonTypes';
 import convertTypeToBuyOrSell from './convertTypeToBuyOrSell';
 import { convertedHistoryTypes } from './constants';
 import Queue from './Queue';
 import fifoRecursive from './fifoRecursive/fifoRecursive';
-import asyncGet from './asyncGet';
+import asyncGet from './util/asyncGet';
 
 _.mixin({
     parseHistoryJsonTypes,

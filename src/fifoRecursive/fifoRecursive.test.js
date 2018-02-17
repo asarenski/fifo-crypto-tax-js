@@ -1,7 +1,7 @@
 import fifoRecursive from './fifoRecursive';
 import Queue from '../Queue';
 import moment from 'moment';
-import { fixFloat } from '../mathUtil';
+import { fixFloat } from '../util/mathUtil';
 
 const mockTransaction = (amount, time) => ({amount, time});
 const generateSellEntry = (amount, buyDate, saleDate) => ({amount, buyDate, saleDate});
