@@ -10,6 +10,7 @@ import Queue from './Queue';
 import fifoRecursive from './fifoRecursive/fifoRecursive';
 import asyncGet from './util/asyncGet';
 import { createUrlsFromSellEntries, processPricingData, getPricingData } from './gdaxPricing';
+import { fixFloat } from './util/mathUtil';
 
 _.mixin({
     parseHistoryJsonTypes,
@@ -68,7 +69,25 @@ const historyFilePath = '/home/asarenski/Downloads/history.csv';
 
     const urls = createUrlsFromSellEntries(sellEntries);
     const rawPricingData = await getPricingData(urls);
-    const processedPricingData = processPricingData(rawPricingData)
+    const pricingByTimeStamp = processPricingData(rawPricingData)
 
-    console.log(processedPricingData);
+    const processedSellEntries = sellEntries.map((entry) => {
+        const { amount, buyDate, saleDate } = entry;
+        const buyPrice = pricingByTimeStamp[buyDate.format()];
+        const buyTotal = fixFloat(amount * buyPrice);
+        const salePrice = pricingByTimeStamp[saleDate.format()];
+        const totalSale = fixFloat(amount * salePrice);
+        return {
+            amount,
+            buyDate: buyDate.format(),
+            buyPrice,
+            buyTotal,
+            saleDate: saleDate.format(),
+            salePrice,
+            totalSale,
+        };
+    });
+
+    // TODO need to fix bug on buy and sale dates, something wrong
+    console.log(processedSellEntries);
 })();

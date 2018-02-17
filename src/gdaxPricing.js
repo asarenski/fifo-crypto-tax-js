@@ -43,8 +43,8 @@ export function getPricingData(urls) {
 }
 
 export function processPricingData(rawPricingData) {
-  return rawPricingData.map(({ key, data }) => {
+  return rawPricingData.reduce((acc, { key, data }) => {
     const [[,,, gdaxOpen ]] = data;
-    return { key, price: gdaxOpen };
-  });
+    return {...acc, [key]: gdaxOpen };
+  }, {});
 }
