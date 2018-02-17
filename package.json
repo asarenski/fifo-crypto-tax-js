@@ -6,7 +6,7 @@
   "scripts": {
     "clean": "rm -rf dist",
     "babel": "yarn clean && babel src -d dist",
-    "app": "yarn babel && node dist/index.js",
+    "start": "yarn babel && node dist/index.js",
     "test": "yarn babel && ./node_modules/jasmine/bin/jasmine.js"
   },
   "repository": {
