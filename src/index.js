@@ -1,6 +1,8 @@
 require('babel-polyfill');
 import _ from 'lodash';
 import moment from 'moment';
+import json2csv from 'json2csv';
+import { writeFileSync } from 'fs';
 import { parseAsync } from './util/csvParser';
 import validateOutputJson from './validateOutputJson';
 import parseHistoryJsonTypes from './parseHistoryJsonTypes';
@@ -20,7 +22,8 @@ _.mixin({
 // Note: only use the history from GDAX. The buys and sells throw things off as that misses certain 'match' entries.
 // still need to figure out what those match entries are representing.
 
-const historyFilePath = '/home/asarenski/Downloads/history.csv';
+const baseFilePath = '/home/asarenski/Downloads';
+const historyFilePath = `${baseFilePath}/history.csv`;
 (async function() {
     const historyJson = await parseAsync(historyFilePath);
     const organizedTransactions = _.chain(historyJson)
@@ -88,6 +91,8 @@ const historyFilePath = '/home/asarenski/Downloads/history.csv';
         };
     });
 
-    // TODO need to fix bug on buy and sale dates, something wrong
-    console.log(processedSellEntries);
+    const fields = ['amount', 'buyDate', 'buyPrice', 'buyTotal', 'saleDate', 'salePrice', 'totalSale'];
+    const csv = json2csv({ fields, data: processedSellEntries });
+    const outputFilePath = `${baseFilePath}/output.csv`;
+    writeFileSync(outputFilePath, csv);
 })();

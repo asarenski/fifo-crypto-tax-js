@@ -8,7 +8,9 @@ const asyncGet = (urls, rateLimitTime) => {
       async.mapLimit(urls, 1, ({ key, url }, callback) => {
           return axios.get(url)
           .then(res => {
-              process.stdout.write(`position ${count++} of ${urls.length}\r`);
+              const message = `position ${count} of ${urls.length}`;
+              process.stdout.write(count === urls.length ? message : message + '\r');
+              count += 1;
               setTimeout(() => (callback(null, { key, data: res.data })), rateLimitTime);
           })
           .catch(e => { throw e });
