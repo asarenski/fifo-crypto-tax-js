@@ -2,7 +2,7 @@ require('babel-polyfill');
 import _ from 'lodash';
 import moment from 'moment';
 import json2csv from 'json2csv';
-import { writeFileSync } from 'fs';
+import { writeFileSync, existsSync } from 'fs';
 import { parseAsync } from './util/csvParser';
 import validateOutputJson from './validateOutputJson';
 import parseHistoryJsonTypes from './parseHistoryJsonTypes';
@@ -12,7 +12,7 @@ import Queue from './Queue';
 import fifoRecursive from './fifoRecursive/fifoRecursive';
 import asyncGet from './util/asyncGet';
 import { createUrlsFromSellEntries, processPricingData, getPricingData } from './gdaxPricing';
-import { fixFloat } from './util/mathUtil';
+import fixFloat from './util/fixFloat';
 
 _.mixin({
     parseHistoryJsonTypes,
@@ -22,10 +22,19 @@ _.mixin({
 // Note: only use the history from GDAX. The buys and sells throw things off as that misses certain 'match' entries.
 // still need to figure out what those match entries are representing.
 
-const baseFilePath = '/home/asarenski/Downloads';
-const historyFilePath = `${baseFilePath}/history.csv`;
+const BASE_DIRECTORY = '/home/asarenski/Downloads';
+const inputHistoryPath = `${BASE_DIRECTORY}/account.csv`;
+const outputPath = `${BASE_DIRECTORY}/output.csv`;
+
+if (!existsSync(inputHistoryPath)) {
+    throw new Error(`ERROR: file at: ${inputHistoryPath} does not exist.\nPlease put a gdax history.csv in ${BASE_DIRECTORY}`);
+}
+
 (async function() {
-    const historyJson = await parseAsync(historyFilePath);
+    const historyJson = await parseAsync(inputHistoryPath);
+    if (_.isEmpty(historyJson)) {
+        throw new Error('History is empty. Please review the input data.');
+    }
     const organizedTransactions = _.chain(historyJson)
         .parseHistoryJsonTypes()
         .convertTypeToBuyOrSell()
@@ -93,6 +102,6 @@ const historyFilePath = `${baseFilePath}/history.csv`;
 
     const fields = ['amount', 'buyDate', 'buyPrice', 'buyTotal', 'saleDate', 'salePrice', 'totalSale'];
     const csv = json2csv({ fields, data: processedSellEntries });
-    const outputFilePath = `${baseFilePath}/output.csv`;
-    writeFileSync(outputFilePath, csv);
+    writeFileSync(outputPath, csv);
+    console.log(`\nOutput written to: ${outputPath}`);
 })();

@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import moment from 'moment';
 import asyncGet from './util/asyncGet';
+import * as constants from './constants';
 
 // gdax api
 // https://docs.gdax.com/#api
@@ -8,9 +9,11 @@ import asyncGet from './util/asyncGet';
 // const [ gdaxTime, gdaxLow, gdaxHigh, gdaxOpen, gdaxClose, gdaxVolume ] = gdaxResponse;
 // Notes: Setting a 1 minute difference between start and end time gives 1 result with a 5 min granularity
 
+const TARGETED_SECURITY = constants.gdaxUsdSecurities.BTC_USD;
+
 const buildUrl = (start, end) => {
   const FIVE_MINUTE_GRANULAR = 300;
-  return `https://api.gdax.com/products/btc-usd/candles?start=${start}&end=${end}&granularity=${FIVE_MINUTE_GRANULAR}`;
+  return `https://api.gdax.com/products/${TARGETED_SECURITY}/candles?start=${start}&end=${end}&granularity=${FIVE_MINUTE_GRANULAR}`;
 };
 
 export function createUrlsFromSellEntries(sellEntries) {
@@ -29,15 +32,19 @@ export function createUrlsFromSellEntries(sellEntries) {
     }, {})
     .keys()
     .map(date => ({ key: date, momentObj: moment(date) }))
-    .map(({ key, momentObj }) => ({
+    .map(({ key, momentObj }) => {
+      const url = buildUrl(momentObj.format(), momentObj.add(1, 'minutes').format());
+      return {
         key,
-        url: buildUrl(momentObj.format(), momentObj.add(1, 'minutes').format())
-    }))
-    // .take(3) // REMOVE
+        url,
+      };
+    })
+    //.take(3) // DEBUGGING
     .value();
 }
 
 export function getPricingData(urls) {
+  console.log('getting pricing from gdax...');
   const GDAX_RATE_LIMIT_IN_MILLIS = 700;
   return asyncGet(urls, GDAX_RATE_LIMIT_IN_MILLIS);
 }

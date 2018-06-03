@@ -19,8 +19,16 @@ const requiredCsvOutputKeys = [
   'totalSale',
 ];
 
+const gdaxUsdSecurities = {
+  BTC_USD: 'btc-usd',
+  ETH_USD: 'eth-usd',
+  LTC_USD: 'ltc-usd',
+  BCH_USD: 'bch-usd',
+};
+
 export {
   historyTypes,
   convertedHistoryTypes,
   requiredCsvOutputKeys,
+  gdaxUsdSecurities,
 };

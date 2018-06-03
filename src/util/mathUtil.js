@@ -1,1 +1,0 @@
-export const fixFloat = float => parseFloat(parseFloat(float).toPrecision(15));
