@@ -4,7 +4,6 @@ import moment from 'moment';
 import json2csv from 'json2csv';
 import { writeFileSync, existsSync } from 'fs';
 import { parseAsync } from './util/csvParser';
-import validateOutputJson from './validateOutputJson';
 import parseHistoryJsonTypes from './parseHistoryJsonTypes';
 import convertTypeToBuyOrSell from './convertTypeToBuyOrSell';
 import { convertedHistoryTypes } from './constants';
