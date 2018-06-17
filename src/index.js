@@ -34,7 +34,7 @@ if (!existsSync(inputHistoryPath)) {
     if (_.isEmpty(historyJson)) {
         throw new Error('History is empty. Please review the input data.');
     }
-    const organizedTransactions = _.chain(historyJson)
+    const buysAndSells = _.chain(historyJson)
         .parseHistoryJsonTypes()
         .convertTypeToBuyOrSell()
         .reduce((acc, curr) => {
@@ -59,7 +59,7 @@ if (!existsSync(inputHistoryPath)) {
         })
         .value();
 
-    const { buys: leftoverBuys, sellEntries } = _.chain(organizedTransactions.sells)
+    const { buys: leftoverBuys, sellEntries } = _.chain(buysAndSells.sells)
         .map(({ ...props, amount }) => ({ ...props, amount: Math.abs(amount) }))
         .reduce(({ buys, sellEntries }, sell) => {
             const { buyQueue, sellEntries: newEntries } = fifoRecursive(buys, sell);
@@ -68,7 +68,7 @@ if (!existsSync(inputHistoryPath)) {
                 sellEntries: [...sellEntries, ...newEntries]
             };
         }, {
-            buys: new Queue(organizedTransactions.buys.array),
+            buys: new Queue(buysAndSells.buys.array),
             sellEntries: []
         })
         .value();
