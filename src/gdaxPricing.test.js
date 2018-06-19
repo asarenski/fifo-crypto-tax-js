@@ -46,7 +46,7 @@ describe('gdaxPricing', () => {
 
       expect(expectedUrlsObjAsArray.length).toEqual(actuals.length);
       expectedUrlsObjAsArray.forEach(expected => {
-        expect(actuals).toContain(expected);
+        expect(actuals).toContainEqual(expected);
       });
     });
   });
