@@ -1,15 +1,14 @@
 import async from 'async';
 import axios from 'axios';
+import CountMessenger from './CountMessenger';
 
 const asyncGet = (urls, rateLimitTime) => {
-  let urlCount = 1;
-  return new Promise((resolve, reject) => {
+  const countMessenger = new CountMessenger('urlCount', urls.length);
+  return new Promise((resolve) => {
     async.mapLimit(urls, 1, ({ key, url }, callback) => {
       return axios.get(url)
         .then(res => {
-          const message = `position ${urlCount} of ${urls.length}`;
-          process.stdout.write(urlCount === urls.length ? message : message + '\r');
-          urlCount += 1;
+          process.stdout.write(countMessenger.messageAndCount());
           setTimeout(() => (callback(null, { key, data: res.data })), rateLimitTime);
         })
         .catch(e => { throw e });
