@@ -7,7 +7,8 @@
     "clean": "rm -rf dist",
     "babel": "yarn clean && babel src -d dist",
     "start": "yarn babel && node dist/index.js",
-    "test": "yarn babel && ./node_modules/jasmine/bin/jasmine.js"
+    "test-dev": "jest --watch",
+    "test": "jest --coverage"
   },
   "repository": {
     "type": "git",
@@ -23,7 +24,6 @@
     "async": "^2.6.0",
     "axios": "^0.17.1",
     "csvtojson": "^1.1.9",
-    "jasmine": "^3.0.0",
     "json2csv": "^3.11.5",
     "lodash": "^4.17.5",
     "moment": "^2.20.1"
@@ -31,10 +31,24 @@
   "devDependencies": {
     "babel": "^6.23.0",
     "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-jest": "^23.0.1",
     "babel-polyfill": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
+    "babel-preset-env": "^1.7.0",
     "babel-preset-stage-3": "^6.24.1",
-    "istanbul": "^0.4.5"
+    "jest": "^23.1.0",
+    "regenerator-runtime": "^0.11.1"
+  },
+  "jest": {
+    "clearMocks": true,
+    "collectCoverageFrom": [
+      "<rootDir>/src/**/*.js"
+    ],
+    "moduleDirectories": [
+      "node_modules"
+    ],
+    "testMatch": [
+      "<rootDir>/src/**/*.test.js"
+    ]
   }
 }

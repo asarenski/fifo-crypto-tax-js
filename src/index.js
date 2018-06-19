@@ -1,6 +1,5 @@
 require('babel-polyfill');
 import _ from 'lodash';
-import moment from 'moment';
 import json2csv from 'json2csv';
 import { writeFileSync, existsSync } from 'fs';
 import { parseAsync } from './util/csvParser';
@@ -9,7 +8,6 @@ import convertTypeToBuyOrSell from './convertTypeToBuyOrSell';
 import { convertedHistoryTypes } from './constants';
 import Queue from './Queue';
 import fifoRecursive from './fifoRecursive/fifoRecursive';
-import asyncGet from './util/asyncGet';
 import { createUrlsFromSellEntries, processPricingData, getPricingData } from './gdaxPricing';
 import fixFloat from './util/fixFloat';
 

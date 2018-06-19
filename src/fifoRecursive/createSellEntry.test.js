@@ -1,6 +1,6 @@
 import createSellEntry from './createSellEntry';
 
-const mockTransaction = (time, amount) => ({time, amount});
+const mockTransaction = (time, amount) => ({ time, amount });
 
 describe('createSellEntry', () => {
   it('should return the entry with the buy and sell times', () => {

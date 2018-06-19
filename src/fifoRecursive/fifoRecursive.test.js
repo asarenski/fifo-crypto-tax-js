@@ -3,8 +3,8 @@ import Queue from '../Queue';
 import moment from 'moment';
 import fixFloat from '../util/fixFloat';
 
-const mockTransaction = (amount, time) => ({amount, time});
-const generateSellEntry = (amount, buyDate, saleDate) => ({amount, buyDate, saleDate});
+const mockTransaction = (amount, time) => ({ amount, time });
+const generateSellEntry = (amount, buyDate, saleDate) => ({ amount, buyDate, saleDate });
 const generateDefaultBuys = () => {
   const buy1 = mockTransaction(0.222, moment().subtract(10, 'minutes'));
   const buy2 = mockTransaction(0.111, moment().subtract(30, 'minutes'));
@@ -62,7 +62,7 @@ describe('fifoRecursive', () => {
   it('throws an error if the sell somehow outlives all buys', () => {
     const { buy1, buy2, buys } = generateDefaultBuys();
     const sell = mockTransaction(fixFloat(buy1.amount + buy2.amount + 0.3), moment());
-    expect(function() {
+    expect(function () {
       fifoRecursive(buys, sell);
     }).toThrowError('Value was undefined. This means the amount sum is not zero. Something is wrong with the csv.');
   });
